@@ -1,0 +1,42 @@
+{
+	"name": "api",
+	"version": "0.0.1",
+	"description": "The backend of the ultimate AI-powered Discord bot",
+	"main": "build/mod.js",
+	"scripts": {
+		"build": "swc --delete-dir-on-start src --out-dir build",
+		"run": "node build/mod.js",
+		"dev": "nodemon --watch src/ --exec \"npm run start\"",
+		"start": "npm run build && npm run run",
+		"lint": "npx eslint --fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ampere-ai/api.git"
+	},
+	"author": "f1nniboy",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ampere-ai/api/issues"
+	},
+	"homepage": "https://github.com/ampere-ai/api#readme",
+	"dependencies": {
+		"@discordeno/utils": "^19.0.0-next.b2f65c2",
+		"@dqbd/tiktoken": "^1.0.7",
+		"colorette": "^2.0.20",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"node-fetch": "^3.2.10",
+		"rabbitmq-client": "^4.2.1",
+		"swc": "^1.0.11"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.17",
+		"@types/node": "^17.0.23",
+		"@types/ws": "^8.5.3",
+		"@typescript-eslint/eslint-plugin": "^6.4.0",
+		"@typescript-eslint/parser": "^6.4.0",
+		"eslint": "^8.47.0",
+		"nodemon": "^2.0.15"
+	}
+}
