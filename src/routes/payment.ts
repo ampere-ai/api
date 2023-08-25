@@ -62,7 +62,7 @@ router.post("/", auth, async (req, res, next) => {
 	}));
 
 	/* Guild ID, if they want to purchase a Premium server subscription or plan */
-	const guildId: string = req.body.guildId;
+	const guild: string = req.body.guild;
 
 	/* Try to find the corresponding Sellix customer. */
 	const customers = await api.customers.list();
@@ -88,20 +88,20 @@ router.post("/", auth, async (req, res, next) => {
 		/* Which product to use */
 		const product: Product =
 			type === "subscription"
-				? guildId
+				? guild
 					? PRODUCTS.GUILD_SUBSCRIPTION
 					: PRODUCTS.USER_SUBSCRIPTION
 				: PRODUCTS.PLAN_CREDITS;
 
 		const data: CreatePaymentData = {
-			return_url: "about:blank",
+			return_url: "https://discord.gg/ampere-chatgpt-1063957096225321075",
 			email: SELLIX_EMAIL,
 			white_label: false,
 			gateway,
 			customer_id: customer.id,
 			custom_fields: {
 				userId: user.id,
-				guildId: guildId,
+				guildId: guild,
 				type
 			},
 			title: product.title,
@@ -143,9 +143,7 @@ router.post("/webhook", async (req, res, next) => {
 		)
 	) return next(new APIError({
 		message: "Invalid signature", code: 400
-	}));
-
-	
+	}));	
 
 	if (body.event !== "order:paid") return next(new APIError({
 		message: "Invalid event", code: 400
