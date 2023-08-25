@@ -16,19 +16,11 @@ export class Emitter<T extends { done: boolean } & Record<string, any>> {
 	}
 
 	/** Wait until the request has been completed. */
-	public async wait(timeout: number = 120 * 1000): Promise<T> {
-		return Promise.race<T>([
-			new Promise(resolve => {
-				this.on(data => {
-					if (data.done) resolve(data);
-				});
-			}),
-
-			new Promise((_, reject) => {
-				setTimeout(() => {
-					reject(new Error("Timed out"));
-				}, timeout);
-			})
-		]);
+	public async wait(): Promise<T> {
+		return new Promise(resolve => {
+			this.on(data => {
+				if (data.done) resolve(data);
+			});
+		});
 	}
 }

@@ -9,12 +9,12 @@ export function handleError(error: Error, req: Request, res: Response, next: Nex
 		api.logger.error(bold("An error occurred"), "->", error);
 
 		res.status(500).send({
-			message: error.message, success: false
+			error: error.message, success: false
 		});
 
 	} else {
 		res.status(error.options.code ?? 500).send({
-			message: error.options.message, success: false
+			error: error.options.message, success: false
 		});
 	}
 }

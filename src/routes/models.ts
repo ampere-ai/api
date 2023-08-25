@@ -68,7 +68,10 @@ function parseParameters(model: Model, body: Record<string, any>) {
 			message: `Missing parameter: ${key}`
 		});
 
-		if (!settings.required && !body[key]) continue;
+		if (!settings.required && !body[key]) {
+			options[key] = settings.default ?? undefined;
+			continue;
+		}
 
 		if (settings.type === "string") {
 			options[key] = body[key].toString();

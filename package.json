@@ -24,6 +24,7 @@
 	"dependencies": {
 		"@discordeno/utils": "^19.0.0-next.b2f65c2",
 		"@dqbd/tiktoken": "^1.0.7",
+		"@waylaidwanderer/fetch-event-source": "^3.0.1",
 		"colorette": "^2.0.20",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",

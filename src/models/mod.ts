@@ -11,8 +11,14 @@ type ModelParameterType<T> =
     ) : T;
 
 interface ModelParameter<T = BuiltInType | object> {
+	/** Type of the parameter */
 	type: T;
+
+	/** Whether this parameter is required */
 	required?: boolean;
+
+	/** Default of this parameter, when it's not specified & optional */
+	default?: ModelParameterType<T>;
 }
 
 export interface Model<Data extends ModelData & Record<string, any> = ModelData, Params extends Record<string, ModelParameter> = Record<string, ModelParameter>> {
