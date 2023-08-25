@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"description": "The backend of the ultimate AI-powered Discord bot",
 	"main": "build/mod.js",
+	"type": "module",
 	"scripts": {
 		"build": "swc --delete-dir-on-start src --out-dir build",
 		"run": "node build/mod.js",
@@ -24,6 +25,7 @@
 		"@discordeno/utils": "^19.0.0-next.b2f65c2",
 		"@dqbd/tiktoken": "^1.0.7",
 		"colorette": "^2.0.20",
+		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
 		"express": "^4.18.2",
 		"node-fetch": "^3.2.10",
@@ -31,6 +33,7 @@
 		"swc": "^1.0.11"
 	},
 	"devDependencies": {
+		"@types/cors": "^2.8.13",
 		"@types/express": "^4.17.17",
 		"@types/node": "^17.0.23",
 		"@types/ws": "^8.5.3",
