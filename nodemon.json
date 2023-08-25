@@ -1,0 +1,5 @@
+{
+	"ext": "env,ts",
+	"signal": "SIGKILL",
+	"exec": "npm run build && node"
+}

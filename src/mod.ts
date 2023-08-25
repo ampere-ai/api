@@ -14,6 +14,7 @@ import { invalidPath } from "./middlewares/404.js";
 import { API_PORT } from "./config.js";
 
 /* Routes */
+import PaymentRoute from "./routes/payment.js";
 import ModelsRoute from "./routes/models.js";
 import BaseRoute from "./routes/base.js";
 
@@ -50,6 +51,7 @@ api.express.use(
 );
 
 /* Routes */
+api.express.use("/pay", PaymentRoute);
 api.express.use("/", ModelsRoute);
 api.express.use("/", BaseRoute);
 

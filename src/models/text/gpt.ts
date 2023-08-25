@@ -1,10 +1,10 @@
 import { fetchEventSource } from "@waylaidwanderer/fetch-event-source";
 
+import { getChatMessageLength, getMessageTokens } from "../../utils/tokens.js";
 import { OpenAIMessage } from "../../types/message.js";
 import { OPENAI_API_KEY } from "../../config.js";
 import { APIError } from "../../types/error.js";
 import { createModel } from "../mod.js";
-import { getChatMessageLength, getMessageTokens } from "../../utils/tokens.js";
 
 type OpenAIModel = "gpt-3.5-turbo" | "gpt-4" | "gpt-3.5-turbo-16k"
 
