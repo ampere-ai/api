@@ -151,22 +151,6 @@ router.post("/webhook", async (req, res, next) => {
 		message: "Invalid event", code: 400
 	}));
 
-	/** FIXME: Testing */
-	body.data.product = {
-		...body.data.product,
-
-		title: "User Subscription"
-	};
-	
-	body.data.custom_fields = {
-		userId: "747682664135524403",
-		guildId: "880075253416603819",
-		credits: 15
-	};
-
-	/* Which product was purchased */
-	const product = Object.values(PRODUCTS).find(p => p.title === body.data.product.title);
-
 	const type: "subscription" | "plan" = body.data.custom_fields.credits ? "plan" : "subscription";
 	const location: "user" | "guild" = body.data.custom_fields.guildId ? "guild" : "user";
 
