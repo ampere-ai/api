@@ -32,7 +32,7 @@ export interface API {
 const api: API = {
 	express: express(),
 	logger: createLogger({ name: "API" }),
-	handlers: { text: [] }
+	handlers: { text: [], image: [] }
 };
 
 api.express.use(express.json({

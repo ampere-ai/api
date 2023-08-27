@@ -17,3 +17,5 @@ export const SELLIX_EMAIL = process.env.SELLIX_EMAIL!;
 
 /** Various third-party API keys */
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+export const STABILITY_API_KEY = process.env.STABILITY_API_KEY!;
+export const SH_API_KEY = process.env.SH_API_KEY!;

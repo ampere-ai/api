@@ -112,11 +112,9 @@ router.post("/", auth, async (req, res, next) => {
 		if (type === "plan" && credits) data.custom_fields.credits = credits;
 
 		const payment = await api.payments.create(data);
-		res.json({ url: payment.url });
+		res.json({ url: payment.url, id: payment.uniqid });
 
 	} catch (error) {
-		console.log(error);
-
 		return next(new APIError({
 			message: "Failed to create payment", code: 500
 		}));

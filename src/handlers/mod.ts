@@ -6,8 +6,8 @@ import { bold } from "colorette";
 import type { Model } from "../models/mod.js";
 import type { API } from "../mod.js";
 
-export type HandlerType = "text";
-export const HandlerTypes: HandlerType[] = [ "text" ];
+export type HandlerType = "text" | "image";
+export const HandlerTypes: HandlerType[] = [ "text", "image" ];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

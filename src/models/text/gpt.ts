@@ -79,7 +79,7 @@ export default createModel({
 					const body = await response.json();
 
 					throw new APIError({
-						message: body.error, code: response.status
+						message: body.error.message, code: response.status
 					});
 				}
 			},
