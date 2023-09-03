@@ -24,18 +24,18 @@ declare module "@sellix/node-sdk" {
 		uniqid: string;
 	}
 
-	export type CurrencyName = "EUR" | "USD"
-	export type GatewayName = "BITCOIN" | "ETHEREUM" | "BINANCE_COIN" | "MONERO" | "STRIPE" | "PAYPAL" | "BINANCE"
+	export type GatewayName = "BITCOIN" | "ETHEREUM" | "BINANCE_COIN" | "MONERO" | "STRIPE" | "PAYPAL" | "BINANCE";
+	export type CurrencyName = "EUR" | "USD";
 
 	interface Sellix {
 		customers: {
 			list: () => Promise<Customer[]>;
 			create: (data: Partial<Customer>) => Promise<Customer>;
-		},
+		};
 
 		payments: {
 			create: (data: CreatePaymentData) => Promise<Payment>;
-		}
+		};
 	}
 
 	export default function(key: string): Sellix;

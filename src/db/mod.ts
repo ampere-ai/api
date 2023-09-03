@@ -29,19 +29,19 @@ async function execute<T>(type: DBRequestType, body: Omit<DBRequestData, "type">
 	return response.data;
 }
 
-export async function get<T = DBType> (collection: CollectionName, id: string | bigint): Promise<T | null> {
+export async function get<T = DBType>(collection: CollectionName, id: string | bigint): Promise<T | null> {
 	return await execute("get", {
 		collection, id: id.toString()
 	} as DBRequestGet);
 }
 
-export async function fetch<T = DBType> (collection: CollectionName, id: string | bigint): Promise<T> {
+export async function fetch<T = DBType>(collection: CollectionName, id: string | bigint): Promise<T> {
 	return await execute("fetch", {
 		collection, id: id.toString()
 	} as DBRequestFetch);
 }
 
-export async function update<T = DBType> (
+export async function update<T = DBType>(
 	collection: CollectionName, id: string | bigint | DBObject, updates: Partial<Omit<T, "id">>
 ): Promise<T> {
 	return await execute("update", {

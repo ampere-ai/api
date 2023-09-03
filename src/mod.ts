@@ -14,7 +14,9 @@ import { invalidPath } from "./middlewares/404.js";
 import { API_PORT } from "./config.js";
 
 /* Routes */
+import StorageRoute from "./routes/storage.js";
 import PaymentRoute from "./routes/payment.js";
+import DatasetRoute from "./routes/dataset.js";
 import ModelsRoute from "./routes/models.js";
 import BaseRoute from "./routes/base.js";
 
@@ -43,6 +45,10 @@ api.express.use(express.urlencoded({
 	limit: "50mb", extended: true
 }));
 
+api.express.use(express.raw({
+	limit: "50mb", type: [ "image/*" ]
+}));
+
 api.express.use(
 	cors({
 		methods: [ "GET", "POST", "PUT", "DELETE" ],
@@ -50,7 +56,11 @@ api.express.use(
 	})
 );
 
+api.express.disable("x-powered-by");
+
 /* Routes */
+api.express.use("/storage", StorageRoute);
+api.express.use("/dataset", DatasetRoute);
 api.express.use("/pay", PaymentRoute);
 api.express.use("/", ModelsRoute);
 api.express.use("/", BaseRoute);

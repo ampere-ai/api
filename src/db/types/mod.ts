@@ -1,8 +1,8 @@
 import type { DBGuild } from "./guild.js";
 import type { DBUser } from "./user.js";
 
-export type CollectionName = "users" | "guilds";
-export const CollectionNames: CollectionName[] = [ "users", "guilds" ];
+export type CollectionName = "users" | "guilds" | "datasets";
+export const CollectionNames: CollectionName[] = [ "users", "guilds", "datasets" ];
 
 export type DBType = DBUser | DBGuild;
 

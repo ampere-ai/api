@@ -19,6 +19,9 @@ interface ModelParameter<T = BuiltInType | object> {
 
 	/** Default of this parameter, when it's not specified & optional */
 	default?: ModelParameterType<T>;
+
+	/** Which choices this parameter accepts */
+	choices?: ModelParameterType<T>[];
 }
 
 export interface Model<Data extends ModelData & Record<string, any> = ModelData, Params extends Record<string, ModelParameter> = Record<string, ModelParameter>> {

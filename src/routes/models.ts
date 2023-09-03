@@ -73,6 +73,10 @@ function parseParameters(model: Model, body: Record<string, any>) {
 			continue;
 		}
 
+		if (settings.choices && !settings.choices.includes(body[key])) throw new APIError({
+			message: `Invalid parameter: ${key}`
+		});
+
 		if (settings.type === "string") {
 			options[key] = body[key].toString();
 		} else if (settings.type === "number") {

@@ -36,7 +36,13 @@ export default createModel({
 
 		model: {
 			type: "string",
-			default: "gpt-3.5-turbo"
+			default: "gpt-3.5-turbo",
+
+			choices: [
+				"gpt-3.5-turbo",
+				"gpt-3.5-turbo-16k",
+				"gpt-4"
+			]
 		},
 
 		maxTokens: {

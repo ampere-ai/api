@@ -15,6 +15,10 @@ export const SELLIX_API_KEY = process.env.SELLIX_API_KEY!;
 export const SELLIX_WEBHOOK_SECRET = process.env.SELLIX_WEBHOOK_SECRET!;
 export const SELLIX_EMAIL = process.env.SELLIX_EMAIL!;
 
+/** Supabase authentication */
+export const DB_URL = process.env.DB_URL!;
+export const DB_KEY = process.env.DB_KEY!;
+
 /** Various third-party API keys */
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 export const STABILITY_API_KEY = process.env.STABILITY_API_KEY!;

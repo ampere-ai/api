@@ -1,10 +1,7 @@
-import { fetchEventSource } from "@waylaidwanderer/fetch-event-source";
 import { setTimeout as sleep } from "timers/promises";
 
-import { getChatMessageLength, getMessageTokens } from "../../utils/tokens.js";
-import { OpenAIMessage } from "../../types/message.js";
-import { OPENAI_API_KEY, SH_API_KEY } from "../../config.js";
 import { APIError } from "../../types/error.js";
+import { SH_API_KEY } from "../../config.js";
 import { createModel } from "../mod.js";
 
 export default createModel({
@@ -187,15 +184,15 @@ async function checkGeneration(id: string): Promise<{
 	};
 }
 
-function headers() {
+export function headers(anon?: boolean) {
 	return {
 		"Content-Type": "application/json",
 		Accept: "application/json",
-		apiKey: SH_API_KEY,
+		apiKey: anon ? "0000000000" : SH_API_KEY,
 		"Client-Agent": "ampere:v0.0.1:@f1nniboy"
 	};
 }
 
-function calculateCost(kudos: number) {
+export function calculateCost(kudos: number) {
 	return kudos / 1000;
 }
