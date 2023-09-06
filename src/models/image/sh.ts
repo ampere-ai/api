@@ -126,6 +126,7 @@ async function startGeneration(options: {
 	const body = {
 		prompt: options.negativePrompt ? `${options.prompt} ### ${options.negativePrompt}` : options.prompt,
 		models: [ options.model ],
+		censor_nsfw: true,
 
 		params: {
 			sampler_name: options.sampler,

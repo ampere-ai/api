@@ -18,6 +18,7 @@ import StorageRoute from "./routes/storage.js";
 import PaymentRoute from "./routes/payment.js";
 import DatasetRoute from "./routes/dataset.js";
 import ModelsRoute from "./routes/models.js";
+import OtherRoute from "./routes/other.js";
 import BaseRoute from "./routes/base.js";
 
 export interface API {
@@ -61,6 +62,7 @@ api.express.disable("x-powered-by");
 /* Routes */
 api.express.use("/storage", StorageRoute);
 api.express.use("/dataset", DatasetRoute);
+api.express.use("/other", OtherRoute);
 api.express.use("/pay", PaymentRoute);
 api.express.use("/", ModelsRoute);
 api.express.use("/", BaseRoute);
