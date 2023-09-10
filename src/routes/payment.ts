@@ -1,21 +1,18 @@
-import sellix, { CreatePaymentData, CurrencyName, GatewayName } from "@sellix/node-sdk";
-import RabbitMQ from "rabbitmq-client";
+import Sellix, { CreatePaymentData, CurrencyName, GatewayName } from "@sellix/node-sdk";
 import express from "express";
 import crypto from "crypto";
 
-import { RABBITMQ_URI, SELLIX_API_KEY, SELLIX_EMAIL, SELLIX_WEBHOOK_SECRET } from "../config.js";
+import { SELLIX_API_KEY, SELLIX_EMAIL, SELLIX_WEBHOOK_SECRET } from "../config.js";
 import { PlanCredit } from "../db/types/premium.js";
 import { auth } from "../middlewares/auth.js";
 import { APIError } from "../types/error.js";
 import { fetch, update } from "../db/mod.js";
+import api from "../mod.js";
 
 const router = express.Router();
 
 /* Sellix API manager */
-const api = sellix(SELLIX_API_KEY);
-
-const connection = new RabbitMQ.Connection(RABBITMQ_URI);
-const publisher = connection.createPublisher();
+const sellix = Sellix(SELLIX_API_KEY);
 
 interface Product {
 	title: string;
@@ -65,16 +62,16 @@ router.post("/", auth, async (req, res, next) => {
 	const guild: string = req.body.guild;
 
 	/* Try to find the corresponding Sellix customer. */
-	const customers = await api.customers.list();
+	const customers = await sellix.customers.list();
 	let customer = customers.find(c => c.email === user.id);
 
 	if (!customer) {
 		try {
-			await api.customers.create({
+			await sellix.customers.create({
 				name: user.name, surname: "Unknown", email: user.id
 			});
 
-			const customers = await api.customers.list();
+			const customers = await sellix.customers.list();
 			customer = customers.find(c => c.email === user.id)!;
 
 		} catch (error) {
@@ -111,7 +108,7 @@ router.post("/", auth, async (req, res, next) => {
 
 		if (type === "plan" && credits) data.custom_fields.credits = credits;
 
-		const payment = await api.payments.create(data);
+		const payment = await sellix.payments.create(data);
 		res.json({ url: payment.url, id: payment.uniqid });
 
 	} catch (error) {
@@ -210,7 +207,7 @@ router.post("/webhook", async (req, res, next) => {
 		);
 	}
 
-	await publisher.send("payment", data);
+	await api.rabbitmq.publisher.send("payment", data);
 	res.json({ success: true });
 });
 

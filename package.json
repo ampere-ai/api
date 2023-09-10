@@ -9,7 +9,7 @@
 		"run": "node build/mod.js",
 		"dev": "nodemon --watch src/ --exec \"npm run start\"",
 		"start": "npm run build && npm run run",
-		"lint": "npx eslint --fix src"
+		"lint": "npx eslint --fix src/"
 	},
 	"repository": {
 		"type": "git",

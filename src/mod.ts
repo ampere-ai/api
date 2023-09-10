@@ -1,3 +1,4 @@
+import RabbitMQ, { type Publisher } from "rabbitmq-client";
 import { createLogger } from "@discordeno/utils";
 import express, { Application } from "express";
 import { bold } from "colorette";
@@ -11,7 +12,7 @@ import type { Model } from "./models/mod.js";
 import { loadModels, type HandlerType, HandlerTypes } from "./handlers/mod.js";
 import { handleError } from "./middlewares/error.js";
 import { invalidPath } from "./middlewares/404.js";
-import { API_PORT } from "./config.js";
+import { API_PORT, RABBITMQ_URI } from "./config.js";
 
 /* Routes */
 import StorageRoute from "./routes/storage.js";
@@ -28,14 +29,25 @@ export interface API {
 	/** All loaded model handlers */
 	handlers: Record<HandlerType, Model[]>;
 
+	/** RabbitMQ publisher */
+	rabbitmq: {
+		publisher: Publisher;
+	}
+
 	/** The logger */
 	logger: ReturnType<typeof createLogger>;
 }
 
+const rabbitmq = new RabbitMQ.Connection(RABBITMQ_URI);
+
 const api: API = {
 	express: express(),
 	logger: createLogger({ name: "API" }),
-	handlers: { text: [], image: [] }
+	handlers: { text: [], image: [] },
+
+	rabbitmq: {
+		publisher: rabbitmq.createPublisher()
+	}
 };
 
 api.express.use(express.json({

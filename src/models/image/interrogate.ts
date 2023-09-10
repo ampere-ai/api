@@ -18,7 +18,7 @@ export default createModel({
 			default: "RealESRGAN_x4plus_anime_6B",
 
 			choices: [
-				"4x_AnimeSharp", "RealESRGAN_x2plus", "RealESRGAN_x4plus", "RealESRGAN_x4plus_anime_6B", "strip_background"
+				"4x_AnimeSharp", "RealESRGAN_x2plus", "RealESRGAN_x4plus", "RealESRGAN_x4plus_anime_6B", "strip_background", "NMKD_Siax"
 			]
 		}
 	},

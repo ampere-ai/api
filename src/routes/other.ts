@@ -37,6 +37,7 @@ router.post("/vote", verifyVote, async (req, res) => {
 		voted: new Date().toISOString()
 	});
 
+	await api.rabbitmq.publisher.send("vote", { id: body.user });
 	res.json({ success: true });
 });
 
