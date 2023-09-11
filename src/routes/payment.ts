@@ -18,21 +18,25 @@ interface Product {
 	title: string;
 	price?: number;
 	currency: CurrencyName;
+	bonus?: number;
+	discount?: number;
 }
 
 const PRODUCTS: Record<string, Product> = {
 	GUILD_SUBSCRIPTION: {
 		title: "Server Subscription",
-		price: 14.99, currency: "EUR"
+		price: 19.99, currency: "EUR",
+		discount: 0.4
 	},
 
 	USER_SUBSCRIPTION: {
 		title: "User Subscription",
-		price: 3.49, currency: "EUR"
+		price: 5.49, currency: "EUR",
+		discount: 0.4
 	},
 	
 	PLAN_CREDITS: {
-		title: "Plan Credits", currency: "USD"
+		title: "Plan Credits", currency: "USD", bonus: 0.2
 	}
 };
 
@@ -101,8 +105,18 @@ router.post("/", auth, async (req, res, next) => {
 				guildId: guild,
 				type
 			},
-			title: product.title,
-			value: type === "plan" && credits ? credits : product.price,
+
+			title: product.bonus
+				? `${product.title} (${product.bonus * 100}% extra)`
+				: product.discount
+					? `${product.title} (${product.discount * 100}% off)`
+					: product.title,
+
+			value: type === "plan" && credits
+				? credits : product.discount
+					? product.price! - (product.price! * product.discount)
+					: product.price,
+
 			currency: product.currency
 		};
 
@@ -182,7 +196,7 @@ router.post("/webhook", async (req, res, next) => {
 	/* Plan */
 	} else if (type === "plan") {
 		const credit: PlanCredit = {
-			amount: data.credits,
+			amount: data.credits * ((PRODUCTS.PLAN_CREDITS.bonus ?? 0) + 1),
 			gateway: data.gateway,
 			time: Date.now(),
 			type: "purchase"
