@@ -46,7 +46,7 @@ const PREMIUM_SUB_DURATION = 30 * 24 * 60 * 60 * 1000;
 router.post("/", auth, async (req, res, next) => {
 	/* User data */
 	const user: {
-		name: string, id: string
+		name: string; id: string;
 	} = req.body.user;
 
 	/** Which gateway they want to use */
