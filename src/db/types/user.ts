@@ -33,8 +33,5 @@ export enum DBUserType {
 export enum DBRole {
 	Owner = "owner",
 	Moderator = "moderator",
-	Investor = "investor",
-	Advertiser = "advertiser",
-	API = "api",
 	Tester = "tester"
 }
