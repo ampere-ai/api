@@ -12,6 +12,7 @@ interface RunPodRequestOptions<T> {
 }
 
 export interface RunPodResponse<T = any> {
+	id: string;
 	status: "QUEUED" | "COMPLETED" | "FAILED";
 	time: number;
 	done: boolean;
@@ -76,6 +77,7 @@ function checkError<T>(response: RawRunPodResponse<T>) {
 
 function rawToResponse<T>(raw: RawRunPodResponse<T>): RunPodResponse<T> {
 	return {
+		id: raw.id,
 		done: raw.status === "COMPLETED",
 		output: raw.output, status: raw.status,
 		time: raw.executionTime
