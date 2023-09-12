@@ -24,6 +24,9 @@ interface ModelParameter<T = BuiltInType | object> {
 	choices?: ModelParameterType<T>[];
 }
 
+type ModelParametersToOptions<T extends Record<string, ModelParameter>>
+	= { [K in keyof T]: ModelParameterType<T[K]["type"]> };
+
 export interface Model<Data extends ModelData & Record<string, any> = ModelData, Params extends Record<string, ModelParameter> = Record<string, ModelParameter>> {
 	/** Name of the model */
 	name: string;
@@ -32,7 +35,7 @@ export interface Model<Data extends ModelData & Record<string, any> = ModelData,
 	parameters: Params;
 
 	/** Executor of the model */
-	execute: (options: { [K in keyof Params]: ModelParameterType<Params[K]["type"]> }, emitter: Emitter<Data>) => Promise<void> | void;
+	execute: (options: ModelParametersToOptions<Params>, emitter: Emitter<Data>) => Promise<void> | void;
 }
 
 /** Base return data for a model */

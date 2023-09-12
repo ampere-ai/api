@@ -6,7 +6,7 @@ import { OPENAI_API_KEY } from "../../config.js";
 import { APIError } from "../../types/error.js";
 import { createModel } from "../mod.js";
 
-type OpenAIModel = "gpt-3.5-turbo" | "gpt-4" | "gpt-3.5-turbo-16k"
+type OpenAIModel = "gpt-3.5-turbo" | "gpt-4" | "gpt-3.5-turbo-16k";
 
 const prices = {
 	"gpt-3.5-turbo": {

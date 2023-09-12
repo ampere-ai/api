@@ -26,3 +26,4 @@ export const TOPGG_AUTH = process.env.TOPGG_AUTH!;
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 export const STABILITY_API_KEY = process.env.STABILITY_API_KEY!;
 export const SH_API_KEY = process.env.SH_API_KEY!;
+export const RUNPOD_API_KEY = process.env.RUNPOD_API_KEY!;

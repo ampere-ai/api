@@ -194,6 +194,6 @@ export function headers(anon?: boolean) {
 	};
 }
 
-export function calculateCost(kudos: number) {
+function calculateCost(kudos: number) {
 	return kudos / 1000;
 }
