@@ -1,29 +1,11 @@
 import { fetchEventSource } from "@waylaidwanderer/fetch-event-source";
 
 import { getChatMessageLength, getMessageTokens } from "../../utils/tokens.js";
-import { OpenAIMessage } from "../../types/message.js";
+import { type OpenAIModel, OPENAI_PRICES } from "../../types/chat.js";
+import { OpenAIMessage } from "../../types/chat.js";
 import { OPENAI_API_KEY } from "../../config.js";
 import { APIError } from "../../types/error.js";
 import { createModel } from "../mod.js";
-
-type OpenAIModel = "gpt-3.5-turbo" | "gpt-4" | "gpt-3.5-turbo-16k";
-
-const prices = {
-	"gpt-3.5-turbo": {
-		input: 0.0015,
-		output: 0.002
-	},
-
-	"gpt-4": {
-		input: 0.03,
-		output: 0.06
-	},
-
-	"gpt-3.5-turbo-16k": {
-		input: 0.003,
-		output: 0.004
-	}
-};
 
 export default createModel({
 	name: "gpt",
@@ -66,15 +48,11 @@ export default createModel({
 
 		result.cost += (
 			getChatMessageLength(...messages) / 1000
-		) * prices[model as OpenAIModel].input;
+		) * OPENAI_PRICES[model as OpenAIModel].input;
 
 		await fetchEventSource("https://api.openai.com/v1/chat/completions", {
 			method: "POST",
-
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${OPENAI_API_KEY}`
-			},
+			headers: openAIHeaders(),
 
 			body: JSON.stringify({
 				messages, max_tokens: maxTokens, model, temperature, stream: true
@@ -100,7 +78,7 @@ export default createModel({
 
 					result.cost += (
 						getMessageTokens(result.content) / 1000
-					) * prices[model as OpenAIModel].output;
+					) * OPENAI_PRICES[model as OpenAIModel].output;
 					
 					return emitter.emit(result);
 				}
@@ -116,3 +94,10 @@ export default createModel({
 		});
 	}
 });
+
+export function openAIHeaders() {
+	return {
+		"Content-Type": "application/json",
+		Authorization: `Bearer ${OPENAI_API_KEY}`
+	};
+}

@@ -1,7 +1,7 @@
 import { get_encoding } from "@dqbd/tiktoken";
 const encoder = get_encoding("cl100k_base");
 
-import type { OpenAIMessage } from "../types/message.js";
+import type { OpenAIMessage } from "../types/chat.js";
 
 /** Count together all tokens contained in a list of conversation messages. */
 export function getChatMessageLength(...messages: OpenAIMessage[]) {

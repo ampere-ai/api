@@ -1,4 +1,4 @@
-import type { OpenAIMessage } from "../../types/message.js";
+import type { OpenAIMessage } from "../../types/chat.js";
 
 import { type RunPodResponse, executeRPRequest } from "../../utils/runpod.js";
 import { Emitter } from "../../utils/emitter.js";
