@@ -81,15 +81,15 @@ export default createModel({
 		})(choice.message.content);
 
 		if (data && data.error) throw new APIError({
-			message: "Failed to translate", code: 500
+			message: "Something went wrong while translating the text", code: 500
 		});
 
 		if (!data || !data.content || !data.input || data.content === "null") throw new APIError({
-			message: "Failed to translate", code: 500
+			message: "Something went wrong while translating the text", code: 500
 		});
 
 		if (data.content === content) throw new APIError({
-			message: "Resulting translation has the same content", code: 400
+			message: "The resulting translation has the same content", code: 400
 		});
 
 		emitter.emit({

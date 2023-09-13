@@ -100,7 +100,7 @@ export default createModel({
 				guidance_scale: options.guidance,
 				h: options.height,
 				w: options.width,
-				sampler: "ddim",
+				sampler: options.sampler,
 				prior_cf_scale: 4,
 				prior_steps: "5",
 				num_images: options.amount,
