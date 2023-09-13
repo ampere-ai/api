@@ -39,7 +39,8 @@ export default createModel({
 			
 			result.emit({
 				content: partial.output.text[0],
-				cost: (tokens / 1000) * costPerTokens, 
+				finishReason: null,
+				cost: (tokens / 1000) * costPerTokens,
 				done: partial.done
 			});
 		});
