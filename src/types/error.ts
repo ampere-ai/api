@@ -1,5 +1,6 @@
 interface APIErrorOptions {
 	message: string | object;
+	id?: string;
 	code?: number;
 }
 

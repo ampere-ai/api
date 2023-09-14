@@ -25,7 +25,7 @@ export default createModel({
 		}
 	},
 
-	execute: async ({ messages, temperature, model }, result) => {
+	execute: async ({ messages, temperature, model }, emitter) => {
 		const response = await fetch(`https://generativelanguage.googleapis.com/v1beta2/models/${model}:generateMessage?key=${MAKERSUITE_API_KEY}`, {
 			method: "POST",
 
@@ -54,9 +54,18 @@ export default createModel({
 			message: data.error.message, code: 400
 		});
 
-		/** TODO: Implement */
-		result.emit({
-			content: "ok", finishReason: null, cost: 0, done: true
+		if (data.filters) {
+			const filter: { reason: string; } = data.filters[0];
+
+			throw new APIError({
+				message: `Google filters failed with reason ${filter.reason}`, id: "filters", code: 400
+			});
+		}
+
+		const result: OpenAIMessage = data.candidates[0];
+
+		emitter.emit({
+			content: result.content, finishReason: null, cost: 0, done: true
 		});
 	}
 });
