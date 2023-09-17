@@ -25,14 +25,12 @@ interface Product {
 const PRODUCTS: Record<string, Product> = {
 	GUILD_SUBSCRIPTION: {
 		title: "Server Subscription",
-		price: 19.99, currency: "EUR",
-		discount: 0.4
+		price: 18.99, currency: "USD"
 	},
 
 	USER_SUBSCRIPTION: {
 		title: "User Subscription",
-		price: 5.49, currency: "EUR",
-		discount: 0.4
+		price: 5.49, currency: "USD"
 	},
 	
 	PLAN_CREDITS: {
