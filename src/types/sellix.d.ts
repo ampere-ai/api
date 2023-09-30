@@ -30,7 +30,7 @@ declare module "@sellix/node-sdk" {
 	interface Sellix {
 		customers: {
 			list: () => Promise<Customer[]>;
-			create: (data: Partial<Customer>) => Promise<Customer>;
+			create: (data: Omit<Customer, "id">) => Promise<Customer>;
 		};
 
 		payments: {

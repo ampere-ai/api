@@ -98,6 +98,8 @@ router.post("/", auth, async (req, res, next) => {
 			white_label: false,
 			gateway,
 			customer_id: customer.id,
+			currency: product.currency,
+
 			custom_fields: {
 				userId: user.id,
 				guildId: guild,
@@ -113,9 +115,7 @@ router.post("/", auth, async (req, res, next) => {
 			value: type === "plan" && credits
 				? credits : product.discount
 					? product.price! - (product.price! * product.discount)
-					: product.price,
-
-			currency: product.currency
+					: product.price
 		};
 
 		if (type === "plan" && credits) data.custom_fields.credits = credits;

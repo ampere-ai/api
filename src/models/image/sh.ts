@@ -54,6 +54,10 @@ export default createModel({
 	},
 
 	execute: async (options, emitter) => {
+		if (options.model === "SDXL_beta::stability.ai#6901") throw new APIError({
+			message: "Stable Horde disabled the SDXL model temporarily"
+		});
+
 		const initial = await startGeneration(options);
 
 		const result: {

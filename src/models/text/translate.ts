@@ -1,8 +1,8 @@
 import { type OpenAIMessage, type OpenAIResponseBody, type OpenAIModel, OPENAI_PRICES } from "../../types/chat.js";
 
 import { getChatMessageLength } from "../../utils/tokens.js";
+import { openAIHeaders } from "../../utils/openai.js";
 import { APIError } from "../../types/error.js";
-import { openAIHeaders } from "./gpt.js";
 import { createModel } from "../mod.js";
 
 interface RawTranslationData {

@@ -1,11 +1,8 @@
-import { setTimeout as sleep } from "timers/promises";
+import { randomUUID } from "crypto";
 
-import { APIError } from "../../types/error.js";
-import { SH_API_KEY } from "../../config.js";
-import { createModel } from "../mod.js";
 import { RunPodResponse, executeRPRequest } from "../../utils/runpod.js";
 import { Emitter } from "../../utils/emitter.js";
-import { randomUUID } from "crypto";
+import { createModel } from "../mod.js";
 
 interface KandinskyResult {
 	/** One image was requested */
