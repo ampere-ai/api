@@ -49,11 +49,11 @@ router.post("/:type/:id", auth, async (req, res, next) => {
 			message: "Dataset entry already exists", code: 409
 		}));
 
-		await setEntry(
+		const updated = await setEntry(
 			req.params.type, req.params.id, req.body
 		);
 
-		res.json(req.body);
+		res.json(updated);
 		
 	} catch (error) {
 		return next(new APIError({

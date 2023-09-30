@@ -10,7 +10,6 @@
 	  "module": "NodeNext",
 	  "rootDir": "./src",
 	  "moduleResolution": "NodeNext",
-	  "resolveJsonModule": true,
 	  
 	  /* JavaScript Support */
 	  "allowJs": true,

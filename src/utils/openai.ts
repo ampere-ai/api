@@ -60,6 +60,8 @@ export async function executeOpenAIRequest({ body, emitter, baseURL, key, cost }
 		},
 
 		onmessage: ({ data: raw }) => {
+			if (raw.length === 0) return;
+
 			if (raw === "[DONE]") {
 				result.done = true;
 
