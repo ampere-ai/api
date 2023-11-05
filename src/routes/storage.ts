@@ -45,8 +45,7 @@ router.post("/:bucket/:path", auth, async (req, res, next) => {
 		);
 
 		if (data.error) return next(new APIError({
-			message: data.error.message,
-			code: (data.error as any).statusCode
+			message: data.error.message, code: 500
 		}));
 		
 		res.send({

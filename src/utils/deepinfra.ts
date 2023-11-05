@@ -3,7 +3,7 @@ import { APIError } from "../types/error.js";
 
 interface DeepInfraRequestOptions {
 	model: string;
-	input: any;
+	input: object;
 }
 
 interface DeepInfraInferenceStatus {
@@ -64,7 +64,7 @@ function rawToResponse<T>(raw: RawDeepInfraResponse<T>): DeepInfraResponse<T> {
 	} as DeepInfraResponse<T>;
 }
 
-export function deepInfraHeaders() {
+function deepInfraHeaders() {
 	return {
 		"Content-Type": "application/json",
 		Authorization: `bearer ${DEEPINFRA_API_KEY}`

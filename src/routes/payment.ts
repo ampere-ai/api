@@ -131,7 +131,7 @@ router.post("/", auth, async (req, res, next) => {
 });
 
 router.post("/webhook", async (req, res, next) => {
-	const headerSignature = req.headers["x-sellix-unescaped-signature"];
+	const headerSignature = req.headers["x-sellix-unescaped-signature"] as string;
 	const body = req.body;
 
 	if (!headerSignature) return next(new APIError({
@@ -146,7 +146,7 @@ router.post("/webhook", async (req, res, next) => {
 	if (
 		!crypto.timingSafeEqual(
 			Buffer.from(signature),
-			Buffer.from(headerSignature as any, "utf-8")
+			Buffer.from(headerSignature, "utf-8")
 		)
 	) return next(new APIError({
 		message: "Invalid signature", code: 400

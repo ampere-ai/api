@@ -8,7 +8,7 @@ import { get, update } from "../db/mod.js";
 
 const router = express.Router();
 
-function setEntry(type: string, id: string, data: any) {
+function setEntry(type: string, id: string, data: object) {
 	return update<DBDatasetEntry>("datasets", id, {
 		type, data
 	});

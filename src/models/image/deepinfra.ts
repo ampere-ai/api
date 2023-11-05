@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
 
 import { executeDeepInfraRequest } from "../../utils/deepinfra.js";
-import { createModel } from "../mod.js";
 import { APIError } from "../../types/error.js";
+import { createModel } from "../mod.js";
 
 export default createModel({
 	name: "deepinfra",
