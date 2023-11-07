@@ -3,9 +3,9 @@ import { fetchEventSource } from "@waylaidwanderer/fetch-event-source";
 import type { OpenAIMessage } from "../types/chat.js";
 import type { Emitter } from "./emitter.js";
 
+import { getChatMessageLength, getMessageTokens } from "./tokens.js";
 import { OPENAI_API_KEY } from "../config.js";
 import { APIError } from "../types/error.js";
-import { getChatMessageLength, getMessageTokens } from "./tokens.js";
 
 interface OpenAIRequestOptions {
 	body: OpenAICompletionsBody;

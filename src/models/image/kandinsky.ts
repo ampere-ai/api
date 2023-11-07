@@ -70,9 +70,7 @@ export default createModel({
 				const urls = data.output.image_url ? [ data.output.image_url ] : data.output.images!;
 
 				results.push(...await Promise.all(urls.map(async url => {
-					const data = Buffer.from(
-						await (await fetch(url)).arrayBuffer()
-					);
+					const data = Buffer.from(await (await fetch(url)).arrayBuffer());
 
 					return {
 						id: randomUUID(), status: "success",
