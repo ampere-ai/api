@@ -1,36 +1,19 @@
 import { fetchEventSource } from "@waylaidwanderer/fetch-event-source";
 
-import type { OpenAIMessage } from "../types/chat.js";
-import type { Emitter } from "./emitter.js";
+import type { OpenAIRequestOptions, OpenAIResponse, OpenAIResponseBody } from "../types/chat.js";
 
 import { getChatMessageLength, getMessageTokens } from "./tokens.js";
 import { OPENAI_API_KEY } from "../config.js";
 import { APIError } from "../types/error.js";
+import { CHAT_PLUGINS } from "./plugins.js";
 
-interface OpenAIRequestOptions {
-	body: OpenAICompletionsBody;
-	emitter: Emitter<any>;
-
-	baseURL?: string;
-	key?: string;
-
-	cost: {
-		input: number;
-		output: number;
-	};
-}
-
-interface OpenAICompletionsBody {
-	messages: OpenAIMessage[];
-	max_tokens: number;
-	model: string;
-	temperature: number;
-}
-
-export async function executeOpenAIRequest({ body, emitter, baseURL, key, cost }: OpenAIRequestOptions) {
-	const result = {
+export async function executeOpenAIRequest(
+	{ body, emitter, baseURL, key, cost }: OpenAIRequestOptions
+): Promise<OpenAIResponse> {
+	const result: OpenAIResponse = {
 		content: "",
 		finishReason: null,
+		tools: [],
 		done: false,
 		cost: 0
 	};
@@ -39,7 +22,7 @@ export async function executeOpenAIRequest({ body, emitter, baseURL, key, cost }
 		getChatMessageLength(...body.messages) / 1000
 	) * cost.input;
 
-	await fetchEventSource(`${baseURL ?? "https://api.openai.com/v1"}/chat/completions`, {
+	fetchEventSource(`${baseURL ?? "https://api.openai.com/v1"}/chat/completions`, {
 		method: "POST",
 
 		headers: openAIHeaders(key),
@@ -72,15 +55,32 @@ export async function executeOpenAIRequest({ body, emitter, baseURL, key, cost }
 				return emitter.emit(result);
 			}
 
-			const data = JSON.parse(raw);
-			if (!data.choices || !data.choices[0] || !data.choices[0].delta.content) return;
+			const data: OpenAIResponseBody = JSON.parse(raw);
+			if (!data.choices || !data.choices[0]) return;
 
-			result.content += data.choices[0].delta.content;
+			result.content += data.choices[0].delta.content ?? "";
 			result.finishReason = data.choices[0].finish_reason ?? null;
+			
+			if (data.choices[0].delta.tool_calls) {
+				const call = data.choices[0].delta.tool_calls[0];
+
+				if (!result.tools[call.index]) {
+					result.tools[call.index] = {
+						/* FIXME: Clean this up */
+						plugin: Object.entries(CHAT_PLUGINS).find(([ _, p ]) => p.name === call.function.name)![1] as any,
+						id: call.id,
+						data: ""
+					};
+				} else {
+					result.tools[call.index].data += call.function.arguments;
+				}
+			}
 
 			emitter.emit(result);
 		}
 	});
+
+	return emitter.wait();
 }
 
 export function openAIHeaders(key = OPENAI_API_KEY) {

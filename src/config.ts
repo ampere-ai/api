@@ -29,3 +29,5 @@ export const SH_API_KEY = process.env.SH_API_KEY!;
 export const RUNPOD_API_KEY = process.env.RUNPOD_API_KEY!;
 export const MAKERSUITE_API_KEY = process.env.MAKERSUITE_API_KEY!;
 export const DEEPINFRA_API_KEY = process.env.DEEPINFRA_API_KEY!;
+export const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY!;
+export const TENOR_API_KEY = process.env.TENOR_API_KEY!;

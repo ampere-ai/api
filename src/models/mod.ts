@@ -1,8 +1,9 @@
+import { API } from "../mod.js";
 import type { Emitter } from "../utils/emitter.js";
 
-type BuiltInType = "string" | "number" | "boolean";
+export type BuiltInType = "string" | "number" | "boolean";
 
-type ModelParameterType<T> = 
+export type ModelParameterType<T> = 
     T extends BuiltInType ? (
         T extends "string" ? string :
         T extends "number" ? number :
@@ -35,7 +36,7 @@ export interface Model<Data extends ModelData & Record<string, any> = ModelData,
 	parameters: Params;
 
 	/** Executor of the model */
-	execute: (options: ModelParametersToOptions<Params>, emitter: Emitter<Data>) => Promise<void> | void;
+	execute: (options: ModelParametersToOptions<Params>, emitter: Emitter<Data>, api: API) => Promise<void> | void;
 }
 
 /** Base return data for a model */
@@ -46,6 +47,6 @@ export interface ModelData {
 
 export function createModel<Data extends ModelData & Record<string, any>, Params extends Record<string, ModelParameter>>(
 	model: Model<Data, Params>
-): Model<Data, Params> {
+) {
 	return model;
 }

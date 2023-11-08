@@ -53,7 +53,7 @@ async function request(req: Request, res: Response, next: NextFunction) {
 		const parameters = parseParameters(model, body);
 
 		/* Execute the model. */
-		await model.execute(parameters, emitter);
+		await model.execute(parameters, emitter, api);
 
 	} catch (error) {
 		next(error);
