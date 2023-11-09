@@ -1,24 +1,15 @@
-import { StorageClient } from "@supabase/storage-js";
 import express from "express";
 
 import { auth } from "../middlewares/auth.js";
-
-import { DB_KEY, DB_URL } from "../config.js";
 import { APIError } from "../types/error.js";
-
-const client = new StorageClient(`${DB_URL}/storage/v1`, {
-	apikey: DB_KEY, Authorization: `Bearer ${DB_KEY}`
-});
+import { getStorageURL, uploadToStorage } from "../utils/storage.js";
 
 const router = express.Router();
 
 router.get("/:bucket/:path", auth, async (req, res, next) => {
 	try {
-		const { data: { publicUrl } } = client.from(req.params.bucket).getPublicUrl(
-			req.params.path
-		);
-
-		const response = await fetch(publicUrl);
+		const url = getStorageURL(req.params.bucket, req.params.path);
+		const response = await fetch(url);
 
 		if (!response.ok) return next(new APIError({
 			message: "Failed to fetch storage file", code: 500
@@ -38,10 +29,8 @@ router.get("/:bucket/:path", auth, async (req, res, next) => {
 
 router.post("/:bucket/:path", auth, async (req, res, next) => {
 	try {
-		const data = await client.from(req.params.bucket).upload(
-			req.params.path, req.body, {
-				contentType: req.headers["content-type"]
-			}
+		const data = await uploadToStorage(
+			req.params.bucket, req.params.path, req.params.body, req.headers["content-type"]!
 		);
 
 		if (data.error) return next(new APIError({

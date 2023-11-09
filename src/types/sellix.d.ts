@@ -12,7 +12,7 @@ declare module "@sellix/node-sdk" {
 		white_label: boolean;
 		gateway?: GatewayName;
 		customer_id: string,
-		custom_fields: Record<string, string | number>;
+		custom_fields: Record<string, string | number | boolean | (string | number | boolean)[] | undefined>;
 		value?: number;
 		product_id?: string;
 		title?: string;

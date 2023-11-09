@@ -3,12 +3,21 @@ import { Plugin } from "../utils/plugins.js";
 
 export type OpenAIModel = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | "gpt-4" | "gpt-4-vision-preview";
 
+export interface APIChatContent {
+	type: string;
+	text?: string;
+	image_url?: {
+		url: string;
+		detail?: string;
+	};
+}
+
 export interface OpenAIMessage {
 	role: "system" | "assistant" | "user" | "tool";
 	tool_call_id?: string;
 	tool_calls?: OpenAIChatToolCall[];
 	name?: string;
-	content: string;
+	content: string | APIChatContent[];
 }
 
 export interface OpenAIResponseBody {

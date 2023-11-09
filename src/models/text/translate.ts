@@ -78,7 +78,7 @@ export default createModel({
 			} catch {
 				return null;
 			}
-		})(choice.message.content);
+		})(choice.message.content as string);
 
 		if (data && data.error) throw new APIError({
 			message: "Something went wrong while translating the text", code: 500

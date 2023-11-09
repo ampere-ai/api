@@ -1,6 +1,6 @@
 import { bold } from "colorette";
 
-import { CHAT_PLUGINS, pluginToOpenAITool } from "../../utils/plugins.js";
+import { CHAT_PLUGINS, PluginResult, pluginToOpenAITool } from "../../utils/plugins.js";
 import { executeOpenAIRequest } from "../../utils/openai.js";
 import type { OpenAIMessage } from "../../types/chat.js";
 import { OPENAI_PRICES } from "../../types/chat.js";
@@ -45,8 +45,12 @@ export default createModel({
 	},
 
 	execute: async ({ messages, maxTokens, model, temperature, plugins }, emitter, api) => {
-		if (model.includes("gpt-4")) {
-			model = "gpt-4-1106-preview";
+		if (model == "gpt-4-vision-preview") {
+			const last = messages[messages.length - 1];
+
+			if (Array.isArray(last.content)) plugins = [];
+			else model = "gpt-4-1106-preview";
+			
 		} else if (model.includes("gpt-3.5-turbo")) {
 			model = "gpt-3.5-turbo-1106";
 		}
@@ -60,6 +64,9 @@ export default createModel({
 				emitter: new Emitter()
 			});
 
+			/* If the plugin result got cut off, we can't continue. */
+			if (response.finishReason === "length") throw new Error("Plugin result got cut off");
+
 			/* If the AI didn't call any functions, simply return the response. */
 			if (response.tools.length === 0) return emitter.emit(response);
 
@@ -69,32 +76,38 @@ export default createModel({
 				content: "",
 				tool_calls: response.tools.map((tool, index) => ({
 					type: "function", index, id: tool.id, function: {
-						name: tool.plugin.name,
+						name: tool.plugin.id,
 						arguments: tool.data						
 					}
 				}))
 			});
 
-			const outputs: Record<string, object> = {};
+			const outputs: Record<string, PluginResult> = {};
 
 			for (const call of response.tools) {
-				let result = {};
+				let result: PluginResult = {};
 
 				try {
 					result = await call.plugin.handler({
 						messages, params: JSON.parse(call.data)
-					}) ?? { message: "OK" };
-
+					}) ?? { data: "OK" };
+ 
 				} catch (error) {
-					api.logger.warn("Tool call failed for", bold(call.plugin.name), "->", (error as Error).toString());
-					result = { message: "Something went wrong" };
+					const message = (error as Error).toString();
+
+					api.logger.warn("Tool call failed for", bold(call.plugin.id), "->", message);
+					result.error = message;
 				}
 
 				messages.push({
 					role: "tool",
 					tool_call_id: call.id,
-					content: JSON.stringify(result),
-					name: call.plugin.name
+					content: JSON.stringify(result.data ?? result.error ?? "OK"),
+					name: call.plugin.id
+				});
+
+				if (result.instructions) messages.push({
+					role: "system", content: result.instructions
 				});
 
 				outputs[call.plugin.id] = result;
@@ -102,8 +115,12 @@ export default createModel({
 
 			const res = new Emitter<ModelData>();
 			
-			res.on(data => emitter.emit({ ...data, tools: response.tools.map(t => ({
-				id: t.plugin.id, input: JSON.parse(t.data), output: outputs[t.plugin.id]
+			res.on(data => emitter.emit({ ...data, tools: response.tools!.map(t => ({
+				id: t.plugin.id,
+				input: JSON.parse(t.data),
+				output: outputs[t.plugin.id].data,
+				images: outputs[t.plugin.id].images,
+				failed: !!outputs[t.plugin.id].error
 			})) }));
 
 			await executeOpenAIRequest({

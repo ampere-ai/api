@@ -3,9 +3,9 @@ import { fetchEventSource } from "@waylaidwanderer/fetch-event-source";
 import type { OpenAIRequestOptions, OpenAIResponse, OpenAIResponseBody } from "../types/chat.js";
 
 import { getChatMessageLength, getMessageTokens } from "./tokens.js";
+import { type Plugin, CHAT_PLUGINS } from "./plugins.js";
 import { OPENAI_API_KEY } from "../config.js";
 import { APIError } from "../types/error.js";
-import { CHAT_PLUGINS } from "./plugins.js";
 
 export async function executeOpenAIRequest(
 	{ body, emitter, baseURL, key, cost }: OpenAIRequestOptions
@@ -64,12 +64,14 @@ export async function executeOpenAIRequest(
 			if (data.choices[0].delta.tool_calls) {
 				const call = data.choices[0].delta.tool_calls[0];
 
-				if (!result.tools[call.index]) {
+				if (
+					!result.tools[call.index]
+					&& call.function.name
+					&& CHAT_PLUGINS[call.function.name as keyof typeof CHAT_PLUGINS])
+				{
 					result.tools[call.index] = {
-						/* FIXME: Clean this up */
-						plugin: Object.entries(CHAT_PLUGINS).find(([ _, p ]) => p.name === call.function.name)![1] as any,
-						id: call.id,
-						data: ""
+						plugin: CHAT_PLUGINS[call.function.name as keyof typeof CHAT_PLUGINS] as unknown as Plugin,
+						id: call.id, data: ""
 					};
 				} else {
 					result.tools[call.index].data += call.function.arguments;
